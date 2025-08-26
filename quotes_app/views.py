@@ -2,7 +2,7 @@ import random
 
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.db.models import F, Count, Q
+from django.db.models import F
 from .forms import QuoteForm
 from .models import Quote, QuoteVote
 
@@ -46,7 +46,6 @@ def vote_quote(request, quote_id, vote_type):
     session_key = request.session.session_key
     current_vote = QuoteVote.objects.filter(quote=quote, session_key=session_key).first()
 
-    # логика как раньше
     if vote_type == "like":
         if current_vote and current_vote.value == 1:
             current_vote.delete()
@@ -67,7 +66,6 @@ def vote_quote(request, quote_id, vote_type):
                 defaults={"value": -1}
             )
 
-    # обновляем объект с новыми данными
     quote.refresh_from_db()
 
     return JsonResponse({
@@ -115,6 +113,7 @@ def add_quote(request):
     else:
         form = QuoteForm()
     return render(request, "quotes_app/add_quote.html", {"form": form})
+
 
 
 

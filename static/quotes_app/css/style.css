@@ -76,7 +76,7 @@ blockquote {
 }
 
 .alert {
-    background: var(--charcoal);
+    background: var(--midnight);
     border-left: 4px solid var(--slate);
     padding: 1rem;
     border-radius: 6px;
@@ -98,3 +98,45 @@ input:focus, textarea:focus, select:focus {
     border-color: white;
     outline: none;
 }
+
+.toast-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1050;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.toast {
+    min-width: 250px;
+    background: rgba(220, 53, 69, 0.9); /* красный для ошибок */
+    color: #fff;
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    font-weight: 500;
+    opacity: 0;
+    transform: translateX(100%);
+    animation: slide-in 0.4s forwards, fade-out 0.5s forwards 3.5s;
+}
+
+.toast.success {
+    background: rgba(40, 167, 69, 0.9); /* зелёный для успеха */
+}
+
+@keyframes slide-in {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fade-out {
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
