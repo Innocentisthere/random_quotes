@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Топ-10 цитат</title>
+    <link rel="stylesheet" href="{% static 'quotes_app/css/style.css' %}">
+</head>
+<body>
+<div class="container">
+
+    <h1>Топ-10 цитат</h1>
+
+    {% if quotes %}
+        <ol>
+        {% for q in quotes %}
+            <li class="card">
+                <blockquote>
+                    <p>{{ q.text }}</p>
+                    <footer class="blockquote-footer">Источник: {{ q.source }}</footer>
+                </blockquote>
+                <p>👍 {{ q.likes }} | 👎 {{ q.dislikes }} | 👁 {{ q.views }}</p>
+            </li>
+        {% endfor %}
+        </ol>
+    {% else %}
+        <div class="alert">
+            <p>Пока нет цитат для отображения</p>
+        </div>
+    {% endif %}
+
+    <div class="text-center">
+        <a href="{% url 'index' %}" class="btn btn-outline">⬅ Назад</a>
+    </div>
+
+</div>
+</body>
+</html>

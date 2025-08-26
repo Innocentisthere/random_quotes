@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Нет цитат</title>
+    <link rel="stylesheet" href="{% static 'quotes_app/css/style.css' %}">
+</head>
+<body>
+<div class="container">
+
+    <h1>Цитат пока нет</h1>
+
+    <div class="alert">
+        <p>Вы можете добавить первую цитату прямо сейчас</p>
+        <a href="{% url 'add_quote' %}" class="btn btn-primary">➕ Добавить цитату</a>
+    </div>
+
+</div>
+</body>
+</html>

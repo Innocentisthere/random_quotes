@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Случайная цитата</title>
+    <link rel="stylesheet" href="{% static 'quotes_app/css/style.css' %}">
+</head>
+<body>
+<div class="container">
+
+    <h1>Случайная цитата</h1>
+
+    <div class="card">
+        <blockquote>
+            <p>{{ quote.text }}</p>
+            <footer class="blockquote-footer">Источник: {{ quote.source }}</footer>
+        </blockquote>
+        <hr>
+        <p>👁 {{ quote.views }} | 👍 {{ quote.likes }} | 👎 {{ quote.dislikes }}</p>
+
+        <div>
+            {% if not request.session.liked_quote_id or request.session.liked_quote_id != quote.id %}
+                <a href="{% url 'like_quote' quote.id %}" class="btn btn-primary">👍 Лайк</a>
+                <a href="{% url 'dislike_quote' quote.id %}" class="btn btn-primary">👎 Дизлайк</a>
+            {% else %}
+                <p>Вы уже оценили эту цитату ✅</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="text-center">
+        <a href="{% url 'add_quote' %}" class="btn btn-outline">➕ Добавить цитату</a>
+        <a href="{% url 'top_10' %}" class="btn btn-outline">🏆 Топ-10</a>
+    </div>
+
+</div>
+</body>
+</html>

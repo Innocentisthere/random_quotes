@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить цитату</title>
+    <link rel="stylesheet" href="{% static 'quotes_app/css/style.css' %}">
+</head>
+<body>
+<div class="container">
+
+    <h1>Добавить цитату</h1>
+
+    <div class="card">
+        <form method="post">
+            {% csrf_token %}
+
+            <p>
+                {{ form.text.label_tag }}<br>
+                {{ form.text }}
+            </p>
+            <p>
+                {{ form.source.label_tag }}<br>
+                {{ form.source }}
+            </p>
+            <p>
+                <label for="id_weight">Вес цитаты (1–10):</label><br>
+                <input type="range" id="id_weight" name="weight" min="1" max="10" value="1"
+                       oninput="document.getElementById('weight_val').textContent=this.value">
+                <span id="weight_val">1</span>
+            </p>
+
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </form>
+    </div>
+
+    <div class="text-center">
+        <a href="{% url 'index' %}" class="btn btn-outline">⬅ Назад</a>
+    </div>
+
+</div>
+</body>
+</html>
