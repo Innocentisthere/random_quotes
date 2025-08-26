@@ -17,9 +17,13 @@
             <li class="card">
                 <blockquote>
                     <p>{{ q.text }}</p>
-                    <footer class="blockquote-footer">Источник: {{ q.source }}</footer>
+                    <footer class="blockquote-footer">Источник(автор): {{ q.source }}</footer>
                 </blockquote>
-                <p>👍 {{ q.likes }} | 👎 {{ q.dislikes }} | 👁 {{ q.views }}</p>
+                <p>
+                    👍 {{ q.like_count|default:0 }} |
+                    👎 {{ q.dislike_count|default:0 }} |
+                    👁 {{ q.views|default:0 }}
+                </p>
             </li>
         {% endfor %}
         </ol>

@@ -14,18 +14,14 @@
     <div class="card">
         <blockquote>
             <p>{{ quote.text }}</p>
-            <footer class="blockquote-footer">Источник: {{ quote.source }}</footer>
+            <footer class="blockquote-footer">Источник(автор): {{ quote.source }}</footer>
         </blockquote>
         <hr>
-        <p>👁 {{ quote.views }} | 👍 {{ quote.likes }} | 👎 {{ quote.dislikes }}</p>
+        <p id="stats">👁 {{ quote.views }} | 👍 <span id="likes">{{ quote.likes_count }}</span> | 👎 <span id="dislikes">{{ quote.dislikes_count }}</span></p>
 
         <div>
-            {% if not request.session.liked_quote_id or request.session.liked_quote_id != quote.id %}
-                <a href="{% url 'like_quote' quote.id %}" class="btn btn-primary">👍 Лайк</a>
-                <a href="{% url 'dislike_quote' quote.id %}" class="btn btn-primary">👎 Дизлайк</a>
-            {% else %}
-                <p>Вы уже оценили эту цитату ✅</p>
-            {% endif %}
+            <button id="like-btn" class="btn {% if user_vote and user_vote.value == 1 %}btn-primary{% else %}btn-outline{% endif %}">👍 Лайк</button>
+            <button id="dislike-btn" class="btn {% if user_vote and user_vote.value == -1 %}btn-primary{% else %}btn-outline{% endif %}">👎 Дизлайк</button>
         </div>
     </div>
 
@@ -35,5 +31,41 @@
     </div>
 
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const likeBtn = document.getElementById("like-btn");
+    const dislikeBtn = document.getElementById("dislike-btn");
+
+    function sendVote(type) {
+        fetch("{% url 'vote_quote' quote.id 'TYPE' %}".replace("TYPE", type))
+            .then(response => response.json())
+            .then(data => {
+                // обновляем счётчики
+                document.getElementById("likes").textContent = data.likes;
+                document.getElementById("dislikes").textContent = data.dislikes;
+
+                // сбрасываем стили
+                likeBtn.classList.remove("btn-primary");
+                likeBtn.classList.add("btn-outline");
+                dislikeBtn.classList.remove("btn-primary");
+                dislikeBtn.classList.add("btn-outline");
+
+                // подсвечиваем кнопку если голос есть
+                if (data.user_vote === 1) {
+                    likeBtn.classList.add("btn-primary");
+                    likeBtn.classList.remove("btn-outline");
+                } else if (data.user_vote === -1) {
+                    dislikeBtn.classList.add("btn-primary");
+                    dislikeBtn.classList.remove("btn-outline");
+                }
+            });
+    }
+
+    likeBtn.addEventListener("click", () => sendVote("like"));
+    dislikeBtn.addEventListener("click", () => sendVote("dislike"));
+});
+</script>
+
 </body>
 </html>
