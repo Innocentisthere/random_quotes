@@ -11,33 +11,68 @@
 
     <h1>Добавить цитату</h1>
 
-    <div class="card">
-        <form method="post">
-            {% csrf_token %}
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            {{ form.text.label_tag }}
+            {{ form.text }}
+        </div>
 
-            <p>
-                {{ form.text.label_tag }}<br>
-                {{ form.text }}
-            </p>
-            <p>
-                {{ form.source.label_tag }}<br>
-                {{ form.source }}
-            </p>
-            <p>
-                <label for="id_weight">Вес цитаты (1–10):</label><br>
-                <input type="range" id="id_weight" name="weight" min="1" max="10" value="1"
-                       oninput="document.getElementById('weight_val').textContent=this.value">
-                <span id="weight_val">1</span>
-            </p>
+        <div>
+            {{ form.source.label_tag }}
+            {{ form.source }}
+        </div>
 
-            <button type="submit" class="btn btn-primary">Сохранить</button>
-        </form>
-    </div>
+        <p style="text-align: center;">
+            <label for="id_weight">Вес цитаты (1–10):</label><br>
+            <input type="range" id="id_weight" name="weight" min="1" max="10" value="1"
+                   oninput="document.getElementById('weight_val').textContent=this.value">
+            <span id="weight_val">1</span>
+        </p>
 
-    <div class="text-center">
+        <button type="submit" class="btn btn-primary">Сохранить</button>
         <a href="{% url 'index' %}" class="btn btn-outline">⬅ Назад</a>
-    </div>
+    </form>
 
 </div>
+
+<!-- Контейнер для всплывающих уведомлений -->
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+function showToast(message, type="error") {
+    const container = document.getElementById("toast-container");
+    const toast = document.createElement("div");
+    toast.className = "toast " + (type === "success" ? "success" : "");
+    toast.innerText = message;
+
+    container.appendChild(toast);
+
+    // Запуск анимации для плавного появления
+    requestAnimationFrame(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateX(0)';
+    });
+
+    // Удаляем после 4 секунд
+    setTimeout(() => {
+        toast.remove();
+    }, 4000);
+}
+
+// Показ ошибок формы
+{% if form.errors %}
+    {% for field, errors in form.errors.items %}
+        {% for error in errors %}
+            showToast("{{ error }}", "error");
+        {% endfor %}
+    {% endfor %}
+{% endif %}
+
+{% if success_message %}
+    showToast("{{ success_message }}", "success");
+{% endif %}
+</script>
+
 </body>
 </html>

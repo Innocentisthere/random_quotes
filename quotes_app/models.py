@@ -9,7 +9,7 @@ class Quote(models.Model):
 
     def clean(self):
         if Quote.objects.filter(source=self.source).exclude(pk=self.pk).count() >= 3:
-            raise ValidationError(f"Источник '{self.source}' уже имеет 3 цитаты.")
+            raise ValidationError({"source": f"Source «{self.source}» already have 3 quotes."})
 
     def likes_count(self):
         return self.votes.filter(value=1).count()
