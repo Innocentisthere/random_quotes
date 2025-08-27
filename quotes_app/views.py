@@ -94,13 +94,27 @@ from django.db.models import Count, Q, Value
 from django.db.models.functions import Coalesce
 
 def top_10_quotes(request):
-    top_quotes = (
-        Quote.objects
-        .annotate(like_count=Coalesce(Count("votes", filter=Q(votes__value=1)), Value(0)))
-        .annotate(dislike_count=Coalesce(Count("votes", filter=Q(votes__value=-1)), Value(0)))
-        .order_by("-like_count")[:10]
+    filter_by = request.GET.get("filter", "likes")  # значение по умолчанию
+
+    base_queryset = Quote.objects.annotate(
+        like_count=Coalesce(Count("votes", filter=Q(votes__value=1)), Value(0)),
+        dislike_count=Coalesce(Count("votes", filter=Q(votes__value=-1)), Value(0)),
     )
-    return render(request, "quotes_app/top_10.html", {"quotes": top_quotes})
+
+    if filter_by == "likes":
+        top_quotes = base_queryset.order_by("-like_count")[:10]
+    elif filter_by == "dislikes":
+        top_quotes = base_queryset.order_by("-dislike_count")[:10]
+    elif filter_by == "views":
+        top_quotes = base_queryset.order_by("-views")[:10]
+    else:
+        top_quotes = base_queryset.order_by("-like_count")[:10]
+
+    return render(
+        request,
+        "quotes_app/top_10.html",
+        {"quotes": top_quotes, "filter_by": filter_by},
+    )
 
 
 

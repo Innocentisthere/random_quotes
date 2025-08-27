@@ -3,13 +3,19 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Топ-10 цитат по лайкам</title>
+    <title>Топ-10 цитат</title>
     <link rel="stylesheet" href="{% static 'quotes_app/css/style.css' %}">
 </head>
 <body>
 <div class="container">
 
     <h1>Топ-10 цитат</h1>
+
+    <div class="filter-buttons">
+        <a href="?filter=likes" class="btn {% if filter_by == 'likes' %}btn-primary{% else %}btn-outline{% endif %}">👍 По лайкам</a>
+        <a href="?filter=dislikes" class="btn {% if filter_by == 'dislikes' %}btn-primary{% else %}btn-outline{% endif %}">👎 По дизлайкам</a>
+        <a href="?filter=views" class="btn {% if filter_by == 'views' %}btn-primary{% else %}btn-outline{% endif %}">👁 По просмотрам</a>
+    </div>
 
     {% if quotes %}
         <ol>
@@ -38,5 +44,3 @@
     </div>
 
 </div>
-</body>
-</html>
